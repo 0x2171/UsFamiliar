@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Время знакомства</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #1e0a3c, #2d0b3d, #3a1a5e);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite;
+        }
+
+        .countdown-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(147, 112, 219, 0.3);
+            backdrop-filter: blur(15px);
+            z-index: 1;
+            margin: 15px;
+        }
+
+        .title {
+            color: #d8bfd8;
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px #d8bfd8;
+            font-family: 'Courier New', monospace;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .time-unit {
+            background: rgba(216, 191, 216, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            min-width: 80px;
+            transition: all 0.3s ease;
+            border: 1px solid #d8bfd833;
+        }
+
+        .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d8bfd8;
+            text-shadow: 0 0 10px #d8bfd8;
+            margin-bottom: 0.3rem;
+        }
+
+        .label {
+            font-size: 0.8rem;
+            color: #e6e6fa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @media (max-width: 480px) {
+            .countdown {
+                gap: 0.8rem;
+            }
+            .time-unit {
+                min-width: 70px;
+                padding: 0.8rem;
+            }
+            .number {
+                font-size: 1.5rem;
+            }
+            .title {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .countdown {
+                gap: 0.5rem;
+            }
+            .time-unit {
+                min-width: 65px;
+                padding: 0.6rem;
+            }
+            .number {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="countdown-container">
+        <h1 class="title">Мы с тобой уже знакомы</h1>
+        <div class="countdown">
+            <div class="time-unit">
+                <div class="number" id="days">00</div>
+                <div class="label">Дней</div>
+            </div>
+            <div class="time-unit">
+                <div class="number" id="hours">00</div>
+                <div class="label">Часов</div>
+            </div>
+            <div class="time-unit">
+                <div class="number" id="minutes">00</div>
+                <div class="label">Минут</div>
+            </div>
+            <div class="time-unit">
+                <div class="number" id="seconds">00</div>
+                <div class="label">Секунд</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Создание звёздного фона
+        function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 1.5 + 's';
+                container.appendChild(star);
+            }
+        }
+        createStars();
+
+        // Логика отсчёта времени
+        const startDate = new Date('September 4, 2023 12:00:00');
+        const elements = {
+            days: document.getElementById('days'),
+            hours: document.getElementById('hours'),
+            minutes: document.getElementById('minutes'),
+            seconds: document.getElementById('seconds')
+        };
+
+        function updateCountdown() {
+            const diff = Date.now() - startDate;
+            const days = Math.floor(diff / 86400000);
+            const hours = Math.floor((diff % 86400000) / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+
+            elements.days.textContent = days.toString().padStart(2, '0');
+            elements.hours.textContent = hours.toString().padStart(2, '0');
+            elements.minutes.textContent = minutes.toString().padStart(2, '0');
+            elements.seconds.textContent = seconds.toString().padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
